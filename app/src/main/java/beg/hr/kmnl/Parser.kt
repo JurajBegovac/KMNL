@@ -2,7 +2,6 @@ package beg.hr.kmnl
 
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Element
-import java.io.File
 
 /**
  * Created by juraj on 24/04/2017.
@@ -11,15 +10,24 @@ import java.io.File
 data class Team(val name: String, val games: Int, val wins: Int,
                 val draws: Int, val loses: Int, val goalsScored: Int,
                 val goalsAgainst: Int, val goalDiff: Int, val bonusPoints: Int,
-                val penaltyPoints: Int, val points: Int)
+                val penaltyPoints: Int, val points: Int, val matchIds: List<Int>)
 
-fun parseTeams(input: File): List<Team> =
-    Jsoup.parse(input, "UTF-8")
+fun parseTeams(htmlStringInput: String): List<Team> =
+    Jsoup.parse(htmlStringInput)
         .getElementById("table")
         .getElementsByClass("team")
-        .map(::parseTeam)
+        .map {
+          val matchIds = it.nextElementSibling()
+              .getElementsByClass("team_details_games")
+              .first()
+              .getElementsByClass("team_details_game_a")
+              .map {
+                it.attr("game").toInt()
+              }
+          parseTeam(it, matchIds)
+        }
 
-private fun parseTeam(team: Element): Team {
+private fun parseTeam(team: Element, matchIds: List<Int>): Team {
   val name = team.getElementsByClass("table_stat team_name").text()
   val games = team.getElementsByClass("table_stat team_games").text().toInt()
   val wins = team.getElementsByClass("table_stat team_wins").text().toInt()
@@ -31,18 +39,15 @@ private fun parseTeam(team: Element): Team {
   val bonus = team.getElementsByClass("table_stat team_bonus").text().toInt()
   val penalty = team.getElementsByClass("table_stat team_penalty").text().toInt()
   val points = team.getElementsByClass("table_stat team_points").text().toInt()
-  return Team(name, games, wins, draws, loses, scored, against, difference, bonus, penalty, points)
+  return Team(name, games, wins, draws, loses, scored, against, difference, bonus, penalty, points,
+              matchIds)
 }
 
-data class Player(val teamName: String,
-                  val name: String,
-                  val goals: Int,
-                  val suspensions: Int,
-                  val swear: Int,
-                  val disqualified: Int)
+data class Player(val teamName: String, val name: String, val goals: Int, val suspensions: Int,
+                  val swear: Int, val disqualified: Int)
 
-fun parsePlayers(input: File): List<Player> =
-    Jsoup.parse(input, "UTF-8")
+fun parsePlayers(htmlStringInput: String): List<Player> =
+    Jsoup.parse(htmlStringInput)
         .getElementById("table")
         .getElementsByClass("team_details")
         .map {
@@ -61,14 +66,11 @@ private fun parsePlayer(playerElement: Element, teamName: String): Player {
   return Player(teamName, name, goals, suspensions, swear, disqualified)
 }
 
-data class Game(val id: Int,
-                val team1: String,
-                val team2: String,
-                val team1Score: Int,
+data class Game(val id: Int, val team1: String, val team2: String, val team1Score: Int,
                 val team2Score: Int)
 
-fun parseGames(input: File): List<Game> =
-    Jsoup.parse(input, "UTF-8")
+fun parseGames(htmlStringInput: String): List<Game> =
+    Jsoup.parse(htmlStringInput)
         .getElementById("rounds")
         .getElementsByClass("round")
         .map {
