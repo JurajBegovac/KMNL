@@ -9,7 +9,7 @@ import javax.inject.Singleton
  * Created by juraj on 09/02/2017.
  */
 @Module
-class NetworkModule {
+class NetModule {
   
   @Provides
   @Singleton

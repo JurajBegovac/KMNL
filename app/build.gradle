@@ -20,6 +20,10 @@ android {
     }
 }
 
+kapt {
+    generateStubs = true
+}
+
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     compile 'com.android.support:appcompat-v7:25.3.1'
@@ -71,7 +75,10 @@ dependencies {
     provided 'javax.annotation:jsr250-api:1.0'
 
     // retrofit
-    compile 'com.squareup.retrofit2:retrofit:2.2.0'
+    compile('com.squareup.retrofit2:retrofit:2.2.0') {
+        exclude module: 'okhttp'
+    }
+    compile 'com.squareup.okhttp3:okhttp:3.7.0'
 
     compile 'com.github.pwittchen:reactivenetwork-rx2:0.9.0'
 

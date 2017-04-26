@@ -1,4 +1,4 @@
-package beg.hr.kmnl
+package beg.hr.kmnl.web
 
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Element

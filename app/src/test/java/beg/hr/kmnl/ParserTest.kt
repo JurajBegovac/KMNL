@@ -1,5 +1,9 @@
 package beg.hr.kmnl
 
+import beg.hr.kmnl.web.Team
+import beg.hr.kmnl.web.parseGames
+import beg.hr.kmnl.web.parsePlayers
+import beg.hr.kmnl.web.parseTeams
 import org.amshove.kluent.shouldContain
 import org.amshove.kluent.shouldEqual
 import org.junit.Test

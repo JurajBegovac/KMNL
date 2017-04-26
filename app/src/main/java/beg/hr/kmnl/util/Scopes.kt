@@ -1,4 +1,4 @@
-package beg.hr.kotlindesarrolladorandroid.common.dagger2
+package beg.hr.kmnl.util
 
 import javax.inject.Scope
 import kotlin.annotation.AnnotationRetention.RUNTIME

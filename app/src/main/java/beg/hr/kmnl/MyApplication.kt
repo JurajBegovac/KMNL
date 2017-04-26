@@ -1,15 +1,13 @@
 package beg.hr.kmnl
 
 import android.app.Application
+import beg.hr.kmnl.web.*
 import beg.hr.rxredux.kotlin.util.reduxWithFeedback
 import com.github.pwittchen.reactivenetwork.library.rx2.ReactiveNetwork
 import io.reactivex.Observable
-import io.reactivex.ObservableEmitter
-import io.reactivex.ObservableOnSubscribe
 import io.reactivex.schedulers.Schedulers
 import io.reactivex.subjects.BehaviorSubject
 import io.reactivex.subjects.PublishSubject
-
 
 /**
  * Created by juraj on 24/04/2017.
@@ -24,14 +22,13 @@ sealed class State {
   data class Data(val teams: List<Team>, val players: List<Player>, val games: List<Game>) : State()
 }
 
-
 sealed class Command {
   class Fetch : Command()
-  data class Error(val msg: String) : Command()
-  data class Parse(val html: String) : Command()
-  data class DataParsed(val teams: List<Team>,
-                        val players: List<Player>,
-                        val games: List<Game>) : Command()
+  class Error(val msg: String) : Command()
+  class Parse(val html: String) : Command()
+  class DataParsed(val teams: List<Team>,
+                   val players: List<Player>,
+                   val games: List<Game>) : Command()
 }
 
 // reducer
@@ -77,24 +74,12 @@ fun State.Companion.initialize(commands: Observable<Command>,
           if (it == false)
             Observable.empty()
           else
-            Observable.create(object : ObservableOnSubscribe<Command> {
-              override fun subscribe(e: ObservableEmitter<Command>) {
-                try {
-                  val response = MyApplication.component.restApi().league1().execute()
-                  if (response.isSuccessful) {
-                    e.onNext(Command.Parse(response.body().string()))
-                    e.onComplete()
-                  } else {
-                    e.onError(Throwable(response.message()))
-                  }
-                } catch (error: Exception) {
-                  e.onError(Throwable(error.message))
+            getLeague1Html()
+                .map<Command> { Command.Parse(it) }
+                .onErrorReturn {
+                  val message = it.message ?: "Unknown error"
+                  Command.Error(message)
                 }
-              }
-            }).onErrorReturn {
-              val message = it.message ?: "Unknown error"
-              Command.Error(message)
-            }
         }
   }
   
