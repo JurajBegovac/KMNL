@@ -39,8 +39,10 @@ class TableFragment : RxFragment() {
   
   override fun onStart() {
     super.onStart()
-    (MyApplication.component.application() as MyApplication)
-        .observeState()
+    val state = (MyApplication.component.application() as MyApplication)
+        .state()
+    
+    state
         .bindUntilEvent(this, FragmentEvent.STOP)
         .filter { it is State.Data }
         .map { (it as State.Data).teams }
@@ -49,6 +51,32 @@ class TableFragment : RxFragment() {
         .observeOn(AndroidSchedulers.mainThread())
         .subscribe {
           (table.adapter as TableAdapter).clearAndAddTeams(it)
+        }
+    
+    state
+        .bindUntilEvent(this, FragmentEvent.STOP)
+        .map { it is State.Fetching || it is State.Parsing || it is State.Start }
+        .distinctUntilChanged()
+        .observeOn(AndroidSchedulers.mainThread())
+        .subscribe {
+          loading.visibility = if (it) View.VISIBLE else View.GONE
+        }
+    
+    state
+        .bindUntilEvent(this, FragmentEvent.STOP)
+        .map {
+          if (it is State.Error) Pair(true, it)
+          else Pair(false, Any())
+        }
+        .distinctUntilChanged()
+        .observeOn(AndroidSchedulers.mainThread())
+        .subscribe {
+          if (it.first) {
+            error.visibility = View.VISIBLE
+            error.text = (it.second as State.Error).msg
+          } else {
+            error.visibility = View.GONE
+          }
         }
   }
   

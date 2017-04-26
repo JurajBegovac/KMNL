@@ -2,9 +2,12 @@
 <resources>
     <color name="colorPrimary">#3D2B9B</color>
     <color name="colorPrimaryDark">#00036C</color>
+    <color name="colorPrimaryLight">#7156cd</color>
     <color name="colorAccent">#DC2B1B</color>
 
     <color name="blue">#3D2B9B</color>
     <color name="red">#DC2B1B</color>
+    <color name="redDark">#a20000</color>
+    <color name="redLight">#ff6446</color>
     <color name="yellow">#FAE017</color>
 </resources>

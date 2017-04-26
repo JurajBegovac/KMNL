@@ -9,6 +9,7 @@ import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.Toolbar
 import android.view.Menu
 import android.view.MenuItem
+import android.widget.Toast
 import beg.hr.kmnl.R
 import beg.hr.kmnl.table.TableFragment
 
@@ -27,11 +28,12 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         toolbar,
         R.string.navigation_drawer_open,
         R.string.navigation_drawer_close)
-    drawer.setDrawerListener(toggle)
+    drawer.addDrawerListener(toggle)
     toggle.syncState()
     
     val navigationView = findViewById(R.id.nav_view) as NavigationView
     navigationView.setNavigationItemSelectedListener(this)
+    navigationView.setCheckedItem(R.id.nav_first_league)
     
     fragmentManager.beginTransaction()
         .replace(R.id.main, TableFragment.newInstance())
@@ -69,22 +71,17 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
   
   override fun onNavigationItemSelected(item: MenuItem): Boolean {
     // Handle navigation view item clicks here.
-    val id = item.itemId
-    
-    if (id == R.id.nav_camera) {
-      // Handle the camera action
-    } else if (id == R.id.nav_gallery) {
-      
-    } else if (id == R.id.nav_slideshow) {
-      
-    } else if (id == R.id.nav_manage) {
-      
-    } else if (id == R.id.nav_share) {
-      
-    } else if (id == R.id.nav_send) {
-      
+    when (item.itemId) {
+      R.id.nav_first_league -> {
+        // currently do nothing
+      }
+      R.id.nav_send -> {
+        Toast.makeText(this, "Clicked send", Toast.LENGTH_LONG).show()
+      }
+      R.id.nav_share -> {
+        Toast.makeText(this, "Clicked share", Toast.LENGTH_LONG).show()
+      }
     }
-    
     val drawer = findViewById(R.id.drawer_layout) as DrawerLayout
     drawer.closeDrawer(GravityCompat.START)
     return true
