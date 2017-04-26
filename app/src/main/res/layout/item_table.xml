@@ -12,14 +12,16 @@
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:gravity="center"
-        android:text="#" />
+        android:text="#"
+        android:textSize="@dimen/table_teams_text_size" />
 
     <TextView
         android:id="@+id/name"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="5"
-        android:text="@string/table_name_column_title" />
+        android:text="@string/table_name_column_title"
+        android:textSize="@dimen/table_teams_text_size" />
 
     <TextView
         android:id="@+id/games"
@@ -27,7 +29,8 @@
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:gravity="center"
-        android:text="@string/table_played_column_title" />
+        android:text="@string/table_played_column_title"
+        android:textSize="@dimen/table_teams_text_size" />
 
     <TextView
         android:id="@+id/wins"
@@ -35,7 +38,8 @@
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:gravity="center"
-        android:text="@string/table_won_column_title" />
+        android:text="@string/table_won_column_title"
+        android:textSize="@dimen/table_teams_text_size" />
 
     <TextView
         android:id="@+id/draws"
@@ -43,7 +47,8 @@
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:gravity="center"
-        android:text="@string/table_draw_column_title" />
+        android:text="@string/table_draw_column_title"
+        android:textSize="@dimen/table_teams_text_size" />
 
     <TextView
         android:id="@+id/loses"
@@ -51,7 +56,8 @@
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:gravity="center"
-        android:text="@string/table_lost_column_title" />
+        android:text="@string/table_lost_column_title"
+        android:textSize="@dimen/table_teams_text_size" />
 
     <TextView
         android:id="@+id/goals"
@@ -59,7 +65,8 @@
         android:layout_height="wrap_content"
         android:layout_weight="2"
         android:gravity="center"
-        android:text="@string/table_goals_column_title" />
+        android:text="@string/table_goals_column_title"
+        android:textSize="@dimen/table_teams_text_size" />
 
     <TextView
         android:id="@+id/points"
@@ -67,5 +74,6 @@
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:gravity="center"
-        android:text="@string/table_points_column_title" />
+        android:text="@string/table_points_column_title"
+        android:textSize="@dimen/table_teams_text_size" />
 </LinearLayout>

@@ -54,10 +54,12 @@ class TableFragment : RxFragment() {
   
   private fun mapToTeamItems(teams: List<Team>): List<Item.Team> =
       teams
+          // todo move this sorting out of here
           .sortedWith(compareBy(Team::points,
                                 Team::bonusPoints,
                                 Team::goalDiff,
-                                Team::goalsScored))
+                                Team::goalsScored,
+                                Team::wins))
           .asReversed()
           .mapIndexed { index, team ->
             Item.Team((index + 1).toString(),
