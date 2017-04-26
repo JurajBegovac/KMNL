@@ -2,9 +2,9 @@ package beg.hr.kmnl
 
 import android.app.Application
 import android.content.Context
+import beg.hr.kmnl.util.ApplicationContext
 import beg.hr.kmnl.web.KmnlAPI
 import beg.hr.kmnl.web.NetModule
-import beg.hr.kmnl.util.ApplicationContext
 import dagger.Component
 import dagger.Module
 import dagger.Provides
@@ -17,6 +17,7 @@ import javax.inject.Singleton
 @Singleton
 @Component(modules = arrayOf(AppModule::class, NetModule::class))
 interface AppComponent {
+  fun application(): Application
   fun restApi(): KmnlAPI
 }
 

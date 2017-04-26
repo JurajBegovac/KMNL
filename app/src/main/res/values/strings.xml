@@ -5,4 +5,13 @@
     <string name="navigation_drawer_close">Close navigation drawer</string>
 
     <string name="action_settings">Settings</string>
+
+    <string name="table_name_column_title">Team</string>
+    <string name="table_played_column_title">P</string>
+    <string name="table_won_column_title">W</string>
+    <string name="table_draw_column_title">D</string>
+    <string name="table_lost_column_title">L</string>
+    <string name="table_goals_column_title">Goals</string>
+    <string name="table_points_column_title">PTS</string>
+
 </resources>

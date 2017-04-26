@@ -140,6 +140,6 @@ class MyApplication : Application() {
         .subscribe { state.onNext(it) }
   }
   
-  fun observeState(): Observable<State> = state
+  fun observeState(): Observable<State> = state.share()
   fun dispatch(command: Command) = commands.onNext(command)
 }
