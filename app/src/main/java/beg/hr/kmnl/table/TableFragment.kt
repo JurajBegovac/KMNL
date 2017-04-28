@@ -31,8 +31,7 @@ class TableFragment : RxFragment() {
     super.onActivityCreated(savedInstanceState)
     table.apply {
       setHasFixedSize(true)
-      val linearLayoutManager = LinearLayoutManager(context)
-      layoutManager = linearLayoutManager
+      layoutManager = LinearLayoutManager(context)
     }
     initAdapter()
   }

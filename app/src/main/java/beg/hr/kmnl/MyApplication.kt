@@ -1,9 +1,11 @@
 package beg.hr.kmnl
 
 import android.app.Application
+import android.os.StrictMode
 import beg.hr.kmnl.web.*
 import beg.hr.rxredux.kotlin.util.reduxWithFeedback
 import com.github.pwittchen.reactivenetwork.library.rx2.ReactiveNetwork
+import com.squareup.leakcanary.LeakCanary
 import io.reactivex.Observable
 import io.reactivex.schedulers.Schedulers
 import io.reactivex.subjects.BehaviorSubject
@@ -130,7 +132,28 @@ class MyApplication : Application() {
   }
   
   override fun onCreate() {
+    if (BuildConfig.DEBUG) {
+      StrictMode.setThreadPolicy(StrictMode.ThreadPolicy.Builder()
+                                     .detectAll()
+                                     .penaltyLog()
+                                     .penaltyFlashScreen()
+                                     .build())
+      StrictMode.setVmPolicy(StrictMode.VmPolicy.Builder()
+                                 .detectAll()
+                                 .penaltyLog()
+                                 .build())
+    }
     super.onCreate()
+    
+    if (BuildConfig.DEBUG) {
+      if (LeakCanary.isInAnalyzerProcess(this)) {
+        // This process is dedicated to LeakCanary for heap analysis.
+        // You should not init your app in this process.
+        return
+      }
+      LeakCanary.install(this)
+    }
+    
     component = DaggerAppComponent.builder()
         .appModule(AppModule(this))
         .build()
