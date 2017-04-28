@@ -3,7 +3,7 @@ package beg.hr.kmnl
 import android.app.Application
 import android.os.StrictMode
 import beg.hr.kmnl.web.*
-import beg.hr.rxredux.kotlin.util.reduxWithFeedback
+import beg.hr.rxredux.kotlin.util.system
 import com.github.pwittchen.reactivenetwork.library.rx2.ReactiveNetwork
 import com.squareup.leakcanary.LeakCanary
 import io.reactivex.Observable
@@ -114,11 +114,8 @@ fun State.Companion.initialize(commands: Observable<Command>,
         }
   }
   
-  return commands.reduxWithFeedback(
-      initState,
-      this::reduce,
-      Schedulers.io(),
-      startFeedBack, fetchFeedback, parseFeedback, errorFeedBack
+  return system(initState, { s, c -> State.reduce(s, c) }, Schedulers.io(),
+                { commands }, startFeedBack, fetchFeedback, parseFeedback, errorFeedBack
   )
 }
 
