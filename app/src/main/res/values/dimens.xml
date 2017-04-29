@@ -9,5 +9,7 @@
     <dimen name="medium">16dp</dimen>
 
     <dimen name="table_teams_text_size">12sp</dimen>
+    <dimen name="table_player_name_text_size">12sp</dimen>
+    <dimen name="table_player_team_name_text_size">11sp</dimen>
 
 </resources>

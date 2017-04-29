@@ -13,5 +13,7 @@
     <string name="table_lost_column_title">L</string>
     <string name="table_goals_column_title">Goals</string>
     <string name="table_points_column_title">PTS</string>
+    <string name="top_scorers">Top players</string>
+    <string name="first_league">1. KMNL</string>
 
 </resources>

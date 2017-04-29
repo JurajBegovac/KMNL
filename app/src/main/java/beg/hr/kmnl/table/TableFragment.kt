@@ -2,6 +2,7 @@ package beg.hr.kmnl.table
 
 
 import android.os.Bundle
+import android.support.v4.util.SparseArrayCompat
 import android.support.v7.widget.LinearLayoutManager
 import android.view.LayoutInflater
 import android.view.View
@@ -9,11 +10,17 @@ import android.view.ViewGroup
 import beg.hr.kmnl.MyApplication
 import beg.hr.kmnl.R
 import beg.hr.kmnl.State
+import beg.hr.kmnl.team.TeamDelegateAdapter
+import beg.hr.kmnl.util.DelegateAdapter
+import beg.hr.kmnl.util.GenericAdapter
+import beg.hr.kmnl.util.Item
+import beg.hr.kmnl.web.Player
 import beg.hr.kmnl.web.Team
 import com.trello.rxlifecycle2.android.FragmentEvent
 import com.trello.rxlifecycle2.components.RxFragment
 import com.trello.rxlifecycle2.kotlin.bindUntilEvent
 import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.fragment_table.*
 
 
@@ -40,16 +47,24 @@ class TableFragment : RxFragment() {
     super.onStart()
     val state = (MyApplication.component.application() as MyApplication)
         .state()
+        .subscribeOn(Schedulers.io())
     
     state
         .bindUntilEvent(this, FragmentEvent.STOP)
         .filter { it is State.Data }
-        .map { (it as State.Data).teams }
+        .cast(State.Data::class.java)
         .distinctUntilChanged()
-        .map(this::mapToTeamItems)
+        .map {
+          listOf<Item>()
+              .plus(TitleDelegateAdapter.Title(getString(R.string.first_league)))
+              .plus(HeaderDelegateAdapter.Header(Unit))
+              .plus(mapToTeamItems(it.teams))
+              .plus(TitleDelegateAdapter.Title(getString(R.string.top_scorers)))
+              .plus(mapToBestScorers(it.players))
+        }
         .observeOn(AndroidSchedulers.mainThread())
         .subscribe {
-          (table.adapter as TableAdapter).clearAndAddTeams(it)
+          (table.adapter as GenericAdapter).clearAndAddAll(it)
         }
     
     state
@@ -79,7 +94,15 @@ class TableFragment : RxFragment() {
         }
   }
   
-  private fun mapToTeamItems(teams: List<Team>): List<Item.Team> =
+  private fun mapToBestScorers(players: List<Player>): List<PlayerelegateAdapter.Player> =
+      players
+          .filter { it.goals > 0 }
+          .sortedBy { it.goals }
+          .asReversed()
+          .take(7)
+          .map { PlayerelegateAdapter.Player(it.name, it.teamName, it.goals.toString()) }
+  
+  private fun mapToTeamItems(teams: List<Team>): List<Item> =
       teams
           // todo move this sorting out of here
           .sortedWith(compareBy(Team::points,
@@ -89,20 +112,25 @@ class TableFragment : RxFragment() {
                                 Team::wins))
           .asReversed()
           .mapIndexed { index, team ->
-            Item.Team((index + 1).toString(),
-                      team.name,
-                      team.games.toString(),
-                      team.wins.toString(),
-                      team.draws.toString(),
-                      team.loses.toString(),
-                      "${team.goalsScored}:${team.goalsAgainst}",
-                      team.points.toString())
+            TeamDelegateAdapter.Team((index + 1).toString(),
+                                     team.name,
+                                     team.games.toString(),
+                                     team.wins.toString(),
+                                     team.draws.toString(),
+                                     team.loses.toString(),
+                                     "${team.goalsScored}:${team.goalsAgainst}",
+                                     team.points.toString())
           }
   
   
   private fun initAdapter() {
     if (table.adapter == null) {
-      table.adapter = TableAdapter()
+      val delegateAdapters = SparseArrayCompat<DelegateAdapter>()
+      delegateAdapters.put(TeamDelegateAdapter.TYPE, TeamDelegateAdapter())
+      delegateAdapters.put(HeaderDelegateAdapter.TYPE, HeaderDelegateAdapter())
+      delegateAdapters.put(TitleDelegateAdapter.TYPE, TitleDelegateAdapter())
+      delegateAdapters.put(PlayerelegateAdapter.TYPE, PlayerelegateAdapter())
+      table.adapter = GenericAdapter(delegateAdapters)
     }
   }
 }

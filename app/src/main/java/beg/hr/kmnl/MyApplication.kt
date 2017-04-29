@@ -53,19 +53,17 @@ fun State.Companion.reduce(state: State, command: Command): State {
 //fun State.isFetching(): Boolean = this is State.Fetching
 fun State.isParsing(): Boolean = this is State.Parsing
 
-fun State.isStart(): Boolean = this is State.Start
-
 fun State.Companion.initialize(commands: Observable<Command>,
                                initState: State): Observable<State> {
   
   val startFeedBack: (Observable<State>) -> Observable<Command> = {
-    it.map(State::isStart)
+    it.map { it is State.Start }
         .distinctUntilChanged()
         .switchMap {
-          if (it == false)
-            Observable.empty()
-          else
+          if (it)
             Observable.just(Command.Fetch())
+          else
+            Observable.empty()
         }
   }
   
@@ -86,14 +84,20 @@ fun State.Companion.initialize(commands: Observable<Command>,
   }
   
   val parseFeedback: (Observable<State>) -> Observable<Command> = {
-    it.distinctUntilChanged({ s1, s2 -> s1.isParsing() == s2.isParsing() })
+    it
+        .map {
+          if (it is State.Parsing) Pair(true, it.html)
+          else Pair(false, "")
+        }
+        .distinctUntilChanged()
         .switchMap {
-          if (!it.isParsing()) Observable.empty()
-          else {
-            val html = (it as State.Parsing).html
+          if (it.first) {
+            val html = it.second
             Observable.just(Command.DataParsed(parseTeams(html),
                                                parsePlayers(html),
                                                parseGames(html)))
+          } else {
+            Observable.empty()
           }
         }
   }
