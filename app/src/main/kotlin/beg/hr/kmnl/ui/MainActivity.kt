@@ -35,9 +35,10 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     navigationView.setNavigationItemSelectedListener(this)
     navigationView.setCheckedItem(R.id.nav_first_league)
     
-    fragmentManager.beginTransaction()
-        .replace(R.id.main, TableFragment.newInstance())
-        .commit()
+    if (savedInstanceState == null)
+      fragmentManager.beginTransaction()
+          .replace(R.id.main, TableFragment.newInstance())
+          .commit()
   }
   
   override fun onBackPressed() {

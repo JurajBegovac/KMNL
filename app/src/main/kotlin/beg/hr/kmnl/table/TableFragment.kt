@@ -1,6 +1,5 @@
 package beg.hr.kmnl.table
 
-
 import android.os.Bundle
 import android.support.v4.util.SparseArrayCompat
 import android.support.v7.widget.LinearLayoutManager
@@ -14,6 +13,7 @@ import beg.hr.kmnl.team.TeamDelegateAdapter
 import beg.hr.kmnl.util.DelegateAdapter
 import beg.hr.kmnl.util.GenericAdapter
 import beg.hr.kmnl.util.Item
+import beg.hr.kmnl.util.inflate
 import beg.hr.kmnl.web.Player
 import beg.hr.kmnl.web.Team
 import com.trello.rxlifecycle2.android.FragmentEvent
@@ -21,7 +21,7 @@ import com.trello.rxlifecycle2.components.RxFragment
 import com.trello.rxlifecycle2.kotlin.bindUntilEvent
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
-import kotlinx.android.synthetic.main.fragment_table.*
+import kotlinx.android.synthetic.main.view_table.*
 
 
 class TableFragment : RxFragment() {
@@ -30,12 +30,11 @@ class TableFragment : RxFragment() {
     fun newInstance(): TableFragment = TableFragment()
   }
   
-  override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-                            savedInstanceState: Bundle?): View? =
-      inflater.inflate(R.layout.fragment_table, container, false)
+  override fun onCreateView(inflater: LayoutInflater, container: ViewGroup,
+                            savedInstanceState: Bundle?): View? = container.inflate(R.layout.view_table)
   
-  override fun onActivityCreated(savedInstanceState: Bundle?) {
-    super.onActivityCreated(savedInstanceState)
+  override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
+    super.onViewCreated(view, savedInstanceState)
     table.apply {
       setHasFixedSize(true)
       layoutManager = LinearLayoutManager(context)
@@ -122,14 +121,15 @@ class TableFragment : RxFragment() {
                                      team.points.toString())
           }
   
-  
   private fun initAdapter() {
     if (table.adapter == null) {
       val delegateAdapters = SparseArrayCompat<DelegateAdapter>()
-      delegateAdapters.put(TeamDelegateAdapter.TYPE, TeamDelegateAdapter())
-      delegateAdapters.put(HeaderDelegateAdapter.TYPE, HeaderDelegateAdapter())
-      delegateAdapters.put(TitleDelegateAdapter.TYPE, TitleDelegateAdapter())
-      delegateAdapters.put(PlayerelegateAdapter.TYPE, PlayerelegateAdapter())
+      delegateAdapters.apply {
+        put(TeamDelegateAdapter.TYPE, TeamDelegateAdapter())
+        put(HeaderDelegateAdapter.TYPE, HeaderDelegateAdapter())
+        put(TitleDelegateAdapter.TYPE, TitleDelegateAdapter())
+        put(PlayerelegateAdapter.TYPE, PlayerelegateAdapter())
+      }
       table.adapter = GenericAdapter(delegateAdapters)
     }
   }
