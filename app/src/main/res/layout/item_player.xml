@@ -8,8 +8,9 @@
         android:id="@+id/playerName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Name"
         android:textColor="@android:color/black"
+        android:layout_toStartOf="@+id/value"
+        android:layout_alignParentStart="true"
         android:textSize="@dimen/table_player_name_text_size" />
 
     <TextView
@@ -17,7 +18,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/playerName"
-        android:text="Team"
         android:textSize="@dimen/table_player_team_name_text_size" />
 
     <TextView
@@ -25,7 +25,5 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
-        android:text="0"
         android:textColor="@android:color/black" />
-
 </RelativeLayout>

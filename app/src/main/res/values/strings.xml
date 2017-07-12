@@ -16,4 +16,11 @@
     <string name="top_scorers">Top players</string>
     <string name="first_league">1. KMNL</string>
 
+    <string name="main_drawer_other">Ostalo</string>
+    <string name="main_drawer_share">Share</string>
+    <string name="main_drawer_send">Send</string>
+    <string name="main_drawer_first_league">1. liga</string>
+    <string name="main_drawer_title">Katolička malonogometna liga</string>
+    <string name="item_position_empty">#</string>
+
 </resources>

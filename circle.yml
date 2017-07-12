@@ -24,7 +24,7 @@ test:
   override:
     - ./gradlew clean
     - ./gradlew assembleDebug
-    # - ./gradlew staticAnalysis
+    - ./gradlew staticAnalysis
     - ./gradlew test
 
 general:
