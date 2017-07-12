@@ -2,8 +2,8 @@ package beg.hr.kmnl
 
 import android.app.Application
 import android.os.StrictMode
+import beg.hr.kmnl.util.system
 import beg.hr.kmnl.web.*
-import beg.hr.rxredux.kotlin.util.system
 import com.github.pwittchen.reactivenetwork.library.rx2.ReactiveNetwork
 import com.squareup.leakcanary.LeakCanary
 import io.reactivex.Observable
